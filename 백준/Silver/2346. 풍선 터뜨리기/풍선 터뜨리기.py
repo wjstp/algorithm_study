@@ -1,3 +1,4 @@
+#deque의 rotate라는 함수를 쓰면 매우매우 간단하게 풀린다..
 N= int(input())
 arr = list(map(int, input().split()))
 info_arr = []
@@ -12,13 +13,10 @@ while True :
     if len(info_arr) == 0 :
         break
     if x[1] > 0 :
-        idx += x[1]-1
+        idx = (idx +x[1]-1)%len(info_arr)
     else :
-        idx +=x[1]
-    while idx >=len(info_arr):
-        idx -= len(info_arr)
-    while idx <-len(info_arr):
-        idx += len(info_arr)
+        idx = (idx +x[1])%len(info_arr)
+    
     if idx < 0 :
         idx += len(info_arr)
 print(*ans_arr)
