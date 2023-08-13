@@ -1,0 +1,24 @@
+N= int(input())
+arr = list(map(int, input().split()))
+info_arr = []
+for i in range(N) :
+    info_arr.append((i+1, arr[i])) # 풍선번호, 안에 들어있는 수
+
+ans_arr = []
+idx = 0
+while True :
+    x = info_arr.pop(idx)
+    ans_arr.append(x[0])
+    if len(info_arr) == 0 :
+        break
+    if x[1] > 0 :
+        idx += x[1]-1
+    else :
+        idx +=x[1]
+    while idx >=len(info_arr):
+        idx -= len(info_arr)
+    while idx <-len(info_arr):
+        idx += len(info_arr)
+    if idx < 0 :
+        idx += len(info_arr)
+print(*ans_arr)
