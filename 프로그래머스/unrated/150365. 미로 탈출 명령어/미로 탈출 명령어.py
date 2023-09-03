@@ -1,35 +1,36 @@
-import sys
-sys.setrecursionlimit(10**5)
-dr = [1, 0, 0, -1]
-dc = [0, -1, 1, 0]
-dl = ['d', 'l', 'r', 'u']    
-
-def findRoute(n, m, cr, cc, end_r, end_c, k, cnt, route):
-    global ans, flag
-    if cnt == 0 :
-        if (not(abs(cr-end_r)+abs(cc-end_c)) & 1 and k &1 ) or (abs(cr-end_r)+abs(cc-end_c) & 1 and not (k &1) ):
-            return
-    if cr == end_r and cc == end_c and cnt == k :
-        ans = route
-        flag = 1
-        return    
-    for i in range(4):
-        nr, nc = cr + dr[i], cc + dc[i]
-        if 0<=nr<n and 0<=nc<m :
-            if abs(end_r - nr) + abs(end_c - nc) < k-cnt and not flag:
-                findRoute(n, m, nr, nc, end_r, end_c, k, cnt+1, route+dl[i])
-
-
 def solution(n, m, x, y, r, c, k):
-    global flag, ans
     answer = ''
-    flag = 0
-    ans = ''
-    distance = abs(x-r)+abs(y-c)
-    findRoute(n, m, x-1, y-1, r-1, c-1, k, 0, '')    
-    if flag :
-        answer = ans
-    else :
-        answer = 'impossible'
-    
+    #x,y -> r,c 
+    #좌상단이 1,1/ 우하단이 n,m
+    #세로,가로  -> 2.3이 S
+    diff = abs(x-r)+abs(y-c)
+    if diff%2!=k%2 or diff>k:
+        return 'impossible'
+    #dlru 순서 
+
+    rest = k-diff
+    lcount = 0
+    rcount = 0
+    dcount = 0
+    ucount = 0
+    if x<r : #내려가야함
+        dcount = r-x
+    else:
+        ucount = x-r
+    if y<c :
+        rcount = c-y
+    else:
+        lcount = y-c
+
+    dplus = min( n-max(x,r), rest//2)
+    rest -= dplus*2
+
+    lplus = min( min(y,c)-1, rest//2)
+    rest -= lplus*2
+
+    answer = 'd'*(dcount+dplus)+'l'*(lcount+lplus)+'rl'*(rest//2)+'r'*(rcount+lplus)+'u'*(dplus+ucount)
+    print(lcount,lplus,rcount,rest)
+
+
+
     return answer
