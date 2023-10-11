@@ -1,12 +1,8 @@
-'''
-연결된거 중에 싸이클이 있는지 확인 - adj_list에는 
-'''
 import sys
 from collections import deque
 input = sys.stdin.readline
 
-def tree(start):
-    global parent
+def isTreeByBFS(start, parent):
     q = deque()
     q.append(start)
     parent[start] = 0
@@ -19,8 +15,11 @@ def tree(start):
                 return False
             else:
                 q.append(a)
+                # 방문 처리시 부모노드를 저장한다
                 parent[a] = cnode
     return True
+
+
 
 tc = 0
 while True :
@@ -33,12 +32,15 @@ while True :
         node1, node2 = map(int, input().split())
         adj_list[node1].append(node2)
         adj_list[node2].append(node1)
+            
+            
     parent= [-1]*(n+1)
     cnt = 0
     for i in range(1, n+1):
         if parent[i] == -1: 
-            if tree(i): 
+            if isTreeByBFS(i, parent): 
                 cnt += 1
+                    
     if cnt == 0 :
         print(f'Case {tc}: No trees.')
     elif cnt == 1 :
