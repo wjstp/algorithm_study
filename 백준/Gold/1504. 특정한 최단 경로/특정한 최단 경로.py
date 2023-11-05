@@ -47,15 +47,15 @@ u_to_end = dijkstra(u, N)
 
 route1 = start_to_u + v_to_end + cost
 route2 = start_to_v + u_to_end + cost
-# route3 = start_to_u + u_to_end + cost*2
-# route4 = start_to_v + v_to_end + cost*2
+route3 = start_to_u + u_to_end + cost*2
+route4 = start_to_v + v_to_end + cost*2
 
 
-# if route1 > INF and route2 > INF and route3 > INF and route4 > INF:
-if route1 >=INF and route2 >= INF :
+if route1 >= INF and route2 >= INF and route3 >= INF and route4 >= INF:
+# if route1 >=INF and route2 >= INF :
     print(-1)
 else :
-    # print(min(route1, route2, route3, route4))
-    print(min(route1, route2))
+    print(min(route1, route2, route3, route4))
+    # print(min(route1, route2))
 
     
