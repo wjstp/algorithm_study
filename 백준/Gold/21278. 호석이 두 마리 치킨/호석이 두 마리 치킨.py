@@ -20,6 +20,8 @@ min_move = 10e9
 for t1, t2 in combi :
     a_sum = 0
     for i in range(1, N+1):
+        if a_sum > min_move :
+            break
         if i != t1 and i != t2 :
              q = deque()
              visited = [0 for _ in range(N+1)]
@@ -27,7 +29,7 @@ for t1, t2 in combi :
              visited[i] = 1
              while q :
                 cnode, cmove = q.popleft()
-                if cnode == t1 or cnode == 2 :
+                if cnode == t1 or cnode == t2 :
                     # 거리 계산
                     a_sum += cmove
                     break
@@ -38,14 +40,11 @@ for t1, t2 in combi :
     if a_sum < min_move :
         place1, place2 = t1, t2
         min_move = a_sum
-        break
     elif a_sum == min_move :
         if place1 > t1:
             place1, place2 = t1, t2
         elif place1 == t1 and place2 > t2 :
-            place1, place2 = t1, t2
-        break
-    
+            place1, place2 = t1, t2    
 
 print(place1, place2, min_move*2)
                         
