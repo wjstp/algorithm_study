@@ -8,7 +8,8 @@ input = sys.stdin.readline
 N = int(input().rstrip())
 arr = []
 for _ in range(N):
-    arr.append(tuple(map(int, input().split())))
+    a, b = map(int, input().split())
+    arr.append((a, b))
 cnt = 0
 for i in range(N-2):
     for j in range(i+1, N-1):
