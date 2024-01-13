@@ -4,15 +4,10 @@ def solution(n, tops):
     dp[0] = 1 # 아무것도 없을 떄
     dp[1] = 1
     for i in range(2, 2*n+2):
-        if i % 2 == 0: # 짝수
-            if tops[i//2-1] : # 뿔이 있는 경우
-                dp[i] = (dp[i-1] * 2 + dp[i-2]) % 10007
-            else :
-                dp[i] = (dp[i-1] + dp[i-2]) % 10007
-        else : # 홀수
+        if i % 2 == 0 and tops[i//2-1] : # 짝수 & 뿔이 있는 경우
+            dp[i] = (dp[i-1] * 2 + dp[i-2]) % 10007
+        else : 
             dp[i] = (dp[i-1] + dp[i-2]) % 10007
             
-                
-    # print(dp)
     answer = dp[2*n+1]
     return answer
