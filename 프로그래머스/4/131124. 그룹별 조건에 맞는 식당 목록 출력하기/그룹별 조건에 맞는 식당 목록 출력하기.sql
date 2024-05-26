@@ -9,4 +9,3 @@ WHERE R.MEMBER_ID = (SELECT MEMBER_ID
                      ORDER BY COUNT(*) 
                      DESC LIMIT 1)
 ORDER BY R.REVIEW_DATE, R.REVIEW_TEXT
-
