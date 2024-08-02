@@ -7,6 +7,7 @@ import java.util.*;
 // 범위 지정안한게 계속 괴롭힌.. n + 1로 할거면 처음부터 제대로 해라..
 // 메모리 초과.. 재귀 호출이 너무 많이 되므로 bfs가 더 적합.. 100 * 100 * 5.. 5만 제곱
 // 애초에 모든 경우를 다 볼 필요없이.. 같은 레벨의 최단 경로를 보는거엔 bfs가 적합하다.. 이걸 까먹어?
+// 결국 우선순위큐인듯이 아니라 안써도될거같은데 이미 visited를 3차원으로 구분해서..
 public class Main {
     static int M, N, answer;
     static Status start, end;
@@ -53,22 +54,17 @@ public class Main {
         end = new Status(Integer.parseInt(stz.nextToken()), Integer.parseInt(stz.nextToken()), Integer.parseInt(stz.nextToken()), 0);
 
 
-        answer = Integer.MAX_VALUE;
         breadthFirstSearch();
         System.out.println(answer);
     }
 
     public static void breadthFirstSearch() {
-        PriorityQueue<Status> q = new PriorityQueue<>();
+        Queue<Status> q = new PriorityQueue<>();
         visited = new int[M + 1][N + 1][5];
-        for (int i = 0; i < M + 1; i ++) {
-            for (int j = 0; j < N + 1; j ++) {
-                Arrays.fill(visited[i][j], Integer.MAX_VALUE);
-            }
-        }
 
         q.add(new Status(start.r, start.c, start.dir, 0));
-        visited[start.r][start.c][start.dir] = 0;
+        visited[start.r][start.c][start.dir] = 1;
+
         while (!q.isEmpty()) {
             Status cur = q.poll();
             if (cur.r == end.r && cur.c == end.c && cur.dir == end.dir) {
@@ -76,27 +72,23 @@ public class Main {
                 return;
             }
 
-            int ccost = visited[cur.r][cur.c][cur.dir];
-            if (ccost < cur.cost) {
-                continue;
-            }
             // 방문을 했더라도 코스트가 더 작은 경우라면 다시 방문
             // 방향 전환
             for (int i = 0; i < 2; i ++) {
                 int newDir = rotate(cur.dir, i);
-                if (visited[cur.r][cur.c][newDir] > ccost + 1) {
-                    visited[cur.r][cur.c][newDir] = ccost + 1;
-                    q.add(new Status(cur.r, cur.c, newDir, ccost + 1));
+                if (visited[cur.r][cur.c][newDir] == 0) {
+                    visited[cur.r][cur.c][newDir] = 1;
+                    q.add(new Status(cur.r, cur.c, newDir, cur.cost + 1));
                 }
             }
             // go 1, 2, 3
             for (int i = 1; i <= 3; i ++) {
                 int nr = cur.r + dr[cur.dir - 1] * i;
                 int nc = cur.c + dc[cur.dir - 1] * i;
-                if (1 <= nr && nr <= M && 1<= nc && nc <= N && visited[nr][nc][cur.dir] > ccost + 1) {
+                if (1 <= nr && nr <= M && 1<= nc && nc <= N && visited[nr][nc][cur.dir] == 0) {
                     if (checkRoute(cur, i)) {
-                        visited[nr][nc][cur.dir] = ccost + 1;
-                        q.add(new Status(nr, nc, cur.dir, ccost + 1));
+                        visited[nr][nc][cur.dir] = cur.cost + 1;
+                        q.add(new Status(nr, nc, cur.dir, cur.cost + 1));
                     }
                 }
             }
