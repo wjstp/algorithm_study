@@ -1,44 +1,51 @@
-import heapq
-from math import inf
-
+# bfsq에서 intensity 갱신, visited에 나보다 긴 intensity가 기록되어 있다면 q에 삽입
+from collections import deque
 def solution(n, paths, gates, summits):
-    # 간선 정리 (양방향)
-    graph = [[] for _ in range(n + 1)]
-    for i, j, w in paths:
-        graph[i].append([j, w])
-        graph[j].append([i, w])
-
-    # 산봉우리 판별
-    is_summit = [False] * (n + 1)
-    for summit in summits:
-        is_summit[summit] = True
-
-    # gates 모두 시작 위치
-    distance = [inf] * (n + 1)
-    queue = []
-    for gate in gates:
-        distance[gate] = 0
-        heapq.heappush(queue, [0, gate])
-
-    # 다익스트라
-    while queue:
-        d, i = heapq.heappop(queue)
-        # 산봉우리면 바로 continue
-        # 이렇게 해야 두 개 이상의 산봉우리를 방문하지 않는다.
-        if distance[i] < d or is_summit[i]:
+    answer = []
+    
+    visited = [10e9] * (n + 1) # 1부터 기록
+    adjList = {}
+    for path in paths :
+        i, j, w = path[0], path[1], path[2]
+        adjList.setdefault(i, []).append((j, w))
+        adjList.setdefault(j, []).append((i, w))
+    
+    q = deque()
+    for gate in gates :
+        q.append((0, gate)) # intensity, 현재 노드
+        visited[gate] = 0
+    
+    min_summit = 10e9
+    min_intensity = 10e9
+    summit_set = set(summits)
+    while q :
+        intensity, node = q.pop()
+        
+        # 정상에 도착했을 경우
+        if node in summit_set :
+            if min_intensity > intensity : 
+                min_intensity = intensity
+                min_summit = node
+            elif min_intensity == intensity and min_summit > node:
+                min_summit = node
             continue
-        for j, dd in graph[i]:
-            dd = max(distance[i], dd)
-            if distance[j] > dd:
-                distance[j] = dd
-                heapq.heappush(queue, [dd, j])
+    
+        if visited[node] < intensity :
+            continue
+        if min_intensity < intensity :
+            continue
+            
+        for adj in adjList.get(node) :
+            next = adj[0]
+            cost = adj[1]
+            new_intensity = intensity
+            if cost > intensity :
+                new_intensity = cost
+            if visited[next] > new_intensity :
+                visited[next] = new_intensity
+                q.append((new_intensity, next))
+    
+    return [min_summit, min_intensity]
+     
 
-    # 결과
-    # 거리가 같으면 산봉우리의 번호가 작은 것을 출력해야 하므로
-    # 산봉우리를 정렬하여 살펴보자.
-    result = [-1, inf]
-    for summit in sorted(summits):
-        if distance[summit] < result[1]:
-            result[0] = summit
-            result[1] = distance[summit]
-    return result
+
