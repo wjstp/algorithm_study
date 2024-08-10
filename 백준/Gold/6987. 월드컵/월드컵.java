@@ -22,7 +22,8 @@ public class Main {
                 win[i] = Integer.parseInt(stz.nextToken());
                 draw[i] = Integer.parseInt(stz.nextToken());
                 lose[i] = Integer.parseInt(stz.nextToken());
-                if(win[i] + draw[i] + lose[i] != 5) valid = false;
+                // 너무 여러개면 15개 넘어서까지 경기할 수 있음.. 총 승패표의 총점을 체크해야함
+                if (win[i] + draw[i] + lose[i] != 5) valid = false;
             }
             if (valid) dfs(0);
             if (!flag) System.out.print(0 + " ");
