@@ -58,6 +58,10 @@ public class Main {
         tree[idx] = c;
         while (idx > 1) {
             idx /= 2;
+            // 부모노드가 계속 바뀔지 체크
+            if (tree[idx] == 0 && (tree[idx * 2] == 0 || tree[idx * 2 + 1] == 0)) {
+                break;  // 여전히 0
+            }
             tree[idx] = (tree[idx * 2] * tree[idx * 2 + 1]) % MOD;
         }
     }
