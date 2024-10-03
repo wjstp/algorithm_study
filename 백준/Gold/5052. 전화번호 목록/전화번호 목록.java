@@ -32,11 +32,10 @@ public class Main {
                 trieNode = node;
             }
             // 난 끝났는데 거기서 더 가는게 있는 경우
-            if (trieNode.terminal) {
-                if (trieNode.childNode.isEmpty()) {
-                    return false;
-                }
+            if (trieNode.childNode.isEmpty()) {
+                return false;
             }
+            
             return true;
         }
     }
