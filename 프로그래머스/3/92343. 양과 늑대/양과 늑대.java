@@ -2,44 +2,42 @@ import java.util.*;
 
 class Solution {
     
-    static Map<Integer, List<Integer>> adjList = new HashMap<>();
-    static boolean[][][] check = new boolean[17][18][18]; // 노드, 양 개수, 늑대 개수
     static int maxSheep;
+    static boolean[][][] check = new boolean[17][18][18]; // 현재 노드, 양 수, 늑대 수
+    static Map<Integer, List<Integer>> adjList = new HashMap<>();
     
     public int solution(int[] info, int[][] edges) {
         int answer = 0;
-        for (int i = 0; i < info.length; i ++) 
-            adjList.put(i, new ArrayList<>());
-        
         for (var edge : edges) {
-            int s = edge[0];
-            int e = edge[1];
+            int parent = edge[0];
+            int child = edge[1];
             
-            adjList.get(s).add(e);
-            adjList.get(e).add(s);
+            adjList.putIfAbsent(parent, new ArrayList<>());
+            adjList.get(parent).add(child);
+            
+            adjList.putIfAbsent(child, new ArrayList<>());
+            adjList.get(child).add(parent);
         }
         backtracking(0, 0, 0, info);
         answer = maxSheep;
-        
         return answer;
     }
-    
-    public static void backtracking(int cur, int sheep, int wolves, int[] info) {
-        if (info[cur] == 0) sheep ++;
-        else if (info[cur] == 1) wolves ++;
+    public static void backtracking(int curNode, int sheep, int wolves, int[] info) {
+        if (info[curNode] == 0) sheep ++;
+        else if (info[curNode] == 1) wolves ++;
         
-        if (wolves >= sheep) return;
+        if (sheep <= wolves) return;
         maxSheep = Math.max(sheep, maxSheep);
         
-        for (var adj : adjList.getOrDefault(cur, new ArrayList<>())) {
-            int tmp = info[cur];
-            if (check[cur][sheep][wolves] == false) {
-                check[cur][sheep][wolves] = true;
-                info[cur] = -1;
+        for (var adj : adjList.getOrDefault(curNode, new ArrayList<>())) {
+            if (check[curNode][sheep][wolves] == false) {
+                int tmp = info[curNode];
+                info[curNode] = -1;
+                check[curNode][sheep][wolves] = true;
                 backtracking(adj, sheep, wolves, info);
-                check[cur][sheep][wolves] = false;
-                info[cur] = tmp;
-            } 
+                check[curNode][sheep][wolves] = false;
+                info[curNode] = tmp;
+            }
         }
     }
 }
