@@ -1,6 +1,9 @@
 -- 7월 아이스크림 총 주문량과 상반기 아이스크림 총 주문량을 더한 값이 큰 순서대로 상위 3개의 맛(FLAVOR) 조회
 -- 맛을 기준으로 조인해서 맛을 기준으로 합을 구한다
 
+
+
+
 # SELECT F.FLAVOR
 # FROM FIRST_HALF F
 # JOIN JULY J
