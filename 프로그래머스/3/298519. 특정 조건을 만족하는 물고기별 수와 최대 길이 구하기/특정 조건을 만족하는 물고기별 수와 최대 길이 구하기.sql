@@ -1,0 +1,12 @@
+-- 코드를 작성해주세요
+-- 33CM이상인 물고기 > 종류별로 분류 > 종류별 개수, 최대길이 
+# SELECT * FROM FISH_INFO;
+SELECT  COUNT(*)       FISH_COUNT
+    , MAX(LENGTH)      MAX_LENGTH
+    , FISH_TYPE
+FROM FISH_INFO 
+GROUP BY FISH_TYPE
+HAVING SUM(CASE WHEN COALESCE(LENGTH, 0) <= 10 
+           THEN 10 
+           ELSE LENGTH END) / COUNT(*) >= 33
+ORDER BY FISH_TYPE;
